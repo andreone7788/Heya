@@ -1,0 +1,26 @@
+:root {
+    --brown: #221613;
+    --camel: #72473d;
+    --white: #ece9e1;
+    --beige: #b49d94;
+    --dove: #8d8284;
+    --ivory: #dac4b9;
+}
+
+@font-face {
+    font-family: 'Satoshi';
+    src: url('/SATOSHI-VARIABLE.TTF') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+* {
+    margin: 0;
+}
+
+#page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: var(--ivory);
+}

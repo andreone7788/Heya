@@ -1,0 +1,148 @@
+{
+    "approve": {
+        "error": "Error during user approval",
+        "title": "Heya! Are you sure to approve"
+    },
+
+    "common": {
+        "loading":"Loading...",
+        "approve": "Approve",
+        "cancel": "Cancel",
+        "create": "Create",
+        "delete": "Delete",
+        "save": "Save",
+        "preview": "Preview",
+        "avatar": "Load Avatar",
+
+        "requested": "Requested Field",
+
+        "name": "Name",
+        "surname": "Surname",
+        "phone": "Phone Number",
+        "username": "Username",
+        "address": "Address",
+        "email": "Email",
+        "status": "Status",
+        "password": "Password",
+
+        "login": "Login",
+        "logout": "Logout",
+        "register": "Register"
+    },
+
+    "call":{
+        "incoming": "Heya! Incoming call from",
+        "end": "End Call"
+    },
+
+    "create":{
+        "error": "Error during user creation",
+        "title": "Heya! Create a new user"  
+    },
+
+    "delete":{
+        "error": "Error during user delete",
+        "title": "Heya! Are you sure to delete"
+    },
+
+    "header":{
+        "profile": "Profile",
+        "chat": "Heya! Ready to chat?",
+         "activeUsers":"Active users",
+        "pendingUsers": "Requests"
+    },
+
+    "context":{
+        "error": "useWebSocket must be used inside WebSocketProvider"
+    },
+
+    "hook":{
+        "error": "useAuth must be used inside AuthProvider"
+    },
+
+    "RTChook": {
+        "error": "Error during call start. Check both camera and mic authorizations",
+        "reject": "Call refused by user",
+        "call-err": "Call Error:",
+        "webcamBusyStart": "Webcam not available (probably used by another application). The call will start with audio only.",
+        "webcamBusyAccept": "Webcam not available. The call will be accepted with audio only.",
+        "notReadable": "Cannot access camera/microphone. They might be already in use. Close other apps (Discord, Zoom) and try again.",
+        "notAllowed": "Permission denied to access camera/microphone. Check your browser settings.",
+        "notFound": "No camera or microphone found.",
+        "overconstrained": "Requested video/audio settings are not supported by your devices.",
+        "startGeneric": "Error while starting the call.",
+        "acceptGeneric": "Error while accepting the call."
+    },
+
+    "admin":{
+        "error": { 
+            "loading": "Error during data loading",
+            "create": "Error during table creation"
+        },
+        "table":{
+            "title": "Active user Management",
+            "create": "Create User"
+        },
+        "pendingTable":{
+            "title": "Requests Management"
+        }
+    },
+    "login":{
+        "title": "Heya! Welcome Back",
+        "error": "Error during login",
+        "register": "Don't have an account? Register"
+    },
+
+    "notFound":{
+        "title": "Heya! Seems you landed in a wrong page",
+        "user": "Chat",
+        "admin": "Management",
+        "guest": "Login"
+    },
+
+    "profile":{
+        "error":{
+            "password": "Error during password update",
+            "avatar": "File is too big. Max dimension: 5MB",
+            "file": "Wrong file. Must be an image",
+            "loading": "Error during avatar loading",
+            "update": "Error during profile updating"
+        },
+        "title":"Manage your profile",
+        "info":{
+            "title":"Update profile info",
+            "helper": "Minimum 3 characters",
+            "success": "Profile updated successfully!",
+            "avatar": "Update Avatar",
+            "load": "Avatar updated successfully!",
+            "change": "Update Password",
+            "old": "Old Password",
+            "new": "New Password",
+            "update": "Password updated successfully!"
+        }
+    },
+
+    "register":{
+        "title": "Fill in the fields below to send a registration request to the admin",
+        "login": "Already have an account? Login"
+    },
+
+    "provider":{
+        "error": "Error in check Authentication",
+        "logout": "Logout error:"
+    },
+
+    "chat":{
+        "load": "Error while loading contacts:",
+        "chat": "Contacts",
+        "connect": "Connected",
+        "disconnect": "Disconnected",
+        "notAvailable": "No contacts available",
+        "title": "Heya! Ready to chat?",
+        "subtitle": "Select a contact from the list to begin",
+        "loading": "Loading messages...",
+        "begin": "Heya! There are no messages here. Start the conversation!",
+        "write": "Write a message..."
+    }
+
+}

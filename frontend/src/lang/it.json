@@ -1,0 +1,149 @@
+{
+    "approve": {
+        "error": "Errore durante l'approvazione dell'utente",
+        "title": "Heya! Sei sicuro di voler approvare"
+    },
+
+    "common": {
+        "loading": "Caricando...",
+        "approve": "Approva",
+        "cancel": "Annulla",
+        "create": "Crea",
+        "delete": "Elimina",
+        "save": "Salva",
+        "preview": "Anteprima",
+        "avatar": "Carica Avatar",
+
+        "requested": "Campo richiesto",
+
+        "name": "Nome",
+        "surname": "Cognome",
+        "phone": "Telefono",
+        "username": "Nome Utente",
+        "address": "Indirizzo",
+        "email": "Email",
+        "status": "Stato",
+        "password": "Password",
+
+        "login": "Accedi",
+        "logout": "Esci",
+        "register": "Registrati"
+    },
+
+    "call":{
+        "incoming": "Heya! Chiamata in arrivo da",
+        "end": "Termina Chiamata" 
+    },
+
+    "create":{
+        "error": "Errore durante la creazione dell'utente",
+        "title": "Heya! Crea un nuovo utente"
+    },
+
+    "delete":{
+        "error": "Errore durante l'eliminazione dell'utente",
+        "title": "Heya! Sei sicuro di voler eliminare"
+    },
+
+    "header":{
+        "profile": "Profilo",
+        "chat": "Heya! Ready to chat?",
+        "activeUsers":"Utenti attivi",
+        "pendingUsers": "Richieste"
+    },
+
+    "context":{
+        "error": "useWebSocket deve essere usato dentro WebSocketProvider"
+    },
+
+    "hook":{
+        "error": "useAuth deve essere usato dentro AuthProvider"
+    },
+
+    "RTChook": {
+        "error": "Errore durante l'avvio della chiamata. Controlla le autorizzazioni di videocamera e microfono",
+        "reject": "Chiamata rifiutata dall'utente",
+        "call-err": "Errore di chiamata:",
+        "webcamBusyStart": "Webcam non disponibile (probabilmente in uso da un'altra applicazione). La chiamata partirà solo con audio.",
+        "webcamBusyAccept": "Webcam non disponibile. La chiamata verrà accettata solo con audio.",
+        "notReadable": "Impossibile accedere a webcam/microfono. Potrebbero essere già in uso. Chiudi altre app (Discord, Zoom) e riprova.",
+        "notAllowed": "Permesso negato per accedere alla webcam/microfono. Controlla le impostazioni del browser.",
+        "notFound": "Nessuna webcam o microfono trovato.",
+        "overconstrained": "Le impostazioni richieste per video/audio non sono supportate dai dispositivi.",
+        "startGeneric": "Errore durante l'avvio della chiamata.",
+        "acceptGeneric": "Errore durante l'accettazione della chiamata."
+    },
+
+    "admin":{
+        "error": { 
+            "loading": "Errore durante il caricamento dei dati",
+            "create": "Errore durante la creazione della scheda"
+        },
+        "table":{
+            "title": "Gestionale utenti attivi",
+            "create": "Crea Utente"
+        },
+
+        "pendingTable":{
+            "title": "Gestionale richieste"
+        }
+    },
+    "login":{
+        "title": "Heya! Bentornato",
+        "error": "Errore durante il Login",
+        "register": "Non hai un account? Registrati"
+    },
+
+    "notFound":{
+        "title": "Heya! Sembra che tu sia capitato nella pagina sbagliata",
+        "user": "Chat",
+        "admin": "Gestionale",
+        "guest": "Accedi"
+    },
+
+    "profile":{
+        "error":{
+            "password": "Errore durante la modifica della password",
+            "avatar": "Il file è troppo grande. Dimensione massima: 5MB",
+            "file": "Tipo di file non valido. Carica un immagine",
+            "loading": "Errore durante il caricamento dell'avatar",
+            "update": "Errore durante l'aggiornamento del profilo"
+        },
+        "title":"Gestisci il tuo profilo",
+        "info":{
+            "title":"Modifica Informazioni Profilo",
+            "helper": "Minimo 3 caratteri",
+            "success": "Profilo aggiornato con successo!",
+            "avatar": "Cambia Avatar",
+            "load": "Avatar caricato con successo!",
+            "change": "Cambia Password",
+            "old": "Vecchia Password",
+            "new": "Nuova Password",
+            "update": "Password cambiata con successo!"
+        }
+    },
+
+    "register":{
+        "title": "Compila i campi qui sotto per inoltrare una richiesta di registrazione",
+        "login": "Hai un account? Accedi"
+    },
+
+    "provider":{
+        "error": "Errore nel check Authentication",
+        "logout": "Errore logout:"
+    },
+
+    "chat":{
+        "load": "Errore caricamento contatti:",
+        "chat": "Contatti",
+        "connect": "Connesso",
+        "disconnect": "Disconnesso",
+        "notAvailable": "Nessun contatto disponibile",
+        "title": "Heya! Pronto a chattare?",
+        "subtitle": "Seleziona un contatto dalla lista a sinistra per iniziare",
+        "loading": "Caricamento messaggi...",
+        "begin": "Heya! Nessun messaggio. Inizia la conversazione!",
+        "write": "Scrivi un messaggio..."
+    }
+
+}
