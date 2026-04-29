@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserStatus {
+  PENDING
+  ACTIVE
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum PresenceStatus {
+  ONLINE
+  OFFLINE
+  AWAY
+}
+
+model User {
+  userId                Int                       @id @default(autoincrement())
+  name                  String                    @db.VarChar(100)
+  surname               String                    @db.VarChar(100)
+  username              String                    @db.VarChar(100)
+  email                 String                    @unique @db.VarChar(100)
+  passwordHash          String                    @db.VarChar(100)
+  status                UserStatus                @default(PENDING)
+  address               String?
+  phone                 String?
+  RoleSelected          Role                      @default(USER)
+  avatarUrl             String?
+  sentMessages          Message[]                 @relation("SentMessages")
+  conversations         ConversationParticipant[]
+  presenceStatus        PresenceStatus            @default(OFFLINE)
+  statusMessage         String?
+  registrationRequestId Int?
+  registrationRequest   UserRegistrationRequest?  @relation(fields: [registrationRequestId], references: [id], onDelete: SetNull)
+}
+
+model UserRegistrationRequest {
+  id        Int        @id @default(autoincrement())
+  name      String     @db.VarChar(100)
+  surname   String     @db.VarChar(100)
+  username  String     @db.VarChar(100)
+  email     String     @unique @db.VarChar(100)
+  address   String?
+  phone     String?
+  createdAt DateTime   @default(now())
+  status    UserStatus @default(PENDING)
+  user      User[]
+}
+
+model Conversation {
+  id           Int                       @id @default(autoincrement())
+  createdAt    DateTime                  @default(now())
+  participants ConversationParticipant[]
+  messages     Message[]
+}
+
+model ConversationParticipant {
+  id             Int          @id @default(autoincrement())
+  userId         Int
+  conversationId Int
+  user           User         @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+
+  @@unique([userId, conversationId])
+  @@index([conversationId])
+}
+
+model Message {
+  id             Int          @id @default(autoincrement())
+  conversationId Int
+  senderId       Int
+  createdAt      DateTime     @default(now())
+  ciphertext     String       @db.LongText
+  iv             Bytes
+  tag            Bytes
+  keyId          String       @default("k1")
+  isRead         Boolean      @default(false)
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  sender         User         @relation("SentMessages", fields: [senderId], references: [userId], onDelete: Cascade)
+
+  @@index([conversationId]) // per paginazione ultimi 50 messaggi
+}
