@@ -1,7 +1,7 @@
 //FEDERICA
 
 import { WebSocket, WebSocketServer } from 'ws';
-import { Server as HTTPSServer } from 'https';
+import { Server } from 'http';
 import { saveMessage, getOrCreateConversation } from '../controllers/conversation.controller';
 import { UpdatePresenceStatus } from '../models/user.model';
 import { handleWebRTCSignaling } from './webrtc.handler';
@@ -26,7 +26,7 @@ function broadcastPresenceUpdate(userId: number, status: string) {
 }
 
 // Inizializza il server WebSocket
-export function initializeWebSocket(server: HTTPSServer) {
+export function initializeWebSocket(server: Server) {
     const wsServer = new WebSocketServer({ server });
 
     // Gestione connessioni WebSocket

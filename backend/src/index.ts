@@ -6,6 +6,7 @@ import { logSession } from './middleware/auth';
 import { router } from './routes/index';
 import { Request, Response } from 'express';
 import https from 'https';
+import http from 'http'; // ✅ Aggiungi import
 import fs from 'fs';
 import { initializeWebSocket } from './webSocket/webSocket.handler';
 
@@ -13,19 +14,35 @@ dotenv.config();
 
 const app = express();
 
-const server = https.createServer({
-    key: fs.readFileSync('./ssl/key.pem'),
-    cert: fs.readFileSync('./ssl/cert.pem')
-}, app);
+// ✅ Usa HTTPS in development, HTTP in production
+const isDevelopment = process.env.NODE_ENV !== 'production';
+let server: http.Server | https.Server;
 
-const PORT = 3000;
+if (isDevelopment) {
+    // Development: usa certificati SSL self-signed
+    server = https.createServer({
+        key: fs.readFileSync('./ssl/key.pem'),
+        cert: fs.readFileSync('./ssl/cert.pem')
+    }, app);
+} else {
+    // Production: HTTP normale (Railway gestisce HTTPS)
+    server = http.createServer(app);
+}
+
+// ✅ Porta dinamica per Railway
+const PORT = process.env.PORT || 3000;
 
 app.get('/', (req: Request, res: Response) => {
     res.send('Server WebSocket + Express')
 })
 
+// ✅ CORS configurato per production e development
+const allowedOrigins = process.env.FRONTEND_URL 
+    ? [process.env.FRONTEND_URL, 'https://localhost:5173']
+    : ['https://localhost:5173'];
+
 app.use(cors({
-    origin: 'https://localhost:5173', // ← Cambiato in https
+    origin: allowedOrigins,
     credentials: true
 }));
 
@@ -36,9 +53,9 @@ app.use(expressSession({
     resave: false,
     saveUninitialized: true,
     cookie: { 
-        secure: true,
+        secure: !isDevelopment, // ✅ secure=true solo in production
         httpOnly: true,
-        sameSite: 'none'
+        sameSite: isDevelopment ? 'lax' : 'none'
     }
 }));
 
@@ -49,7 +66,8 @@ app.use('/uploads', express.static('uploads'));
 router(app);
 
 server.listen(PORT, async () => {
-    console.log(`Server HTTPS avviato su https://localhost:${PORT}`);
-    initializeWebSocket(server);
+    const protocol = isDevelopment ? 'https' : 'http';
+    console.log(`Server ${protocol.toUpperCase()} avviato su ${protocol}://localhost:${PORT}`);
+    initializeWebSocket(server as http.Server);
     console.log('WebSocket inizializzato');
 });
