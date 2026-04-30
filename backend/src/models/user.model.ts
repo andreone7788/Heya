@@ -1,7 +1,7 @@
 import { TypeRegister, TypeLogin, TypeUser, TypeUpdatePassSchema, TypeUpdateProfileSchema, TypePendingSchema } from "../types/user.types";
 import  prisma from "../db"
 import bcrypt from "bcrypt";
-import { PresenceStatus } from "../generated/prisma";
+import { PresenceStatus } from "@prisma/client";
 
 // query per il login
 export const LoginQuery = async (utenti: TypeLogin) => {
