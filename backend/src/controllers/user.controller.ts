@@ -81,31 +81,30 @@ export const RegisterController = async (req: Request, res: Response) => {
 
         const pendingUser = await CreatePendingUser(parseResult.data);
 
-        // Invio email admin (non bloccante)
-        try {
-            if (process.env.ADMIN_EMAIL) {
-                await sendMail({
-                    to: process.env.ADMIN_EMAIL,
-                    subject: "Nuova registrazione in attesa di approvazione - Heya",
-                    html: `<p>È stata effettuata una nuova registrazione con i seguenti dettagli:</p>
-                           <ul>
-                             <li><strong>Nome:</strong> ${pendingUser.name} ${pendingUser.surname}</li>
-                             <li><strong>Username:</strong> ${pendingUser.username}</li>
-                             <li><strong>Email:</strong> ${pendingUser.email}</li>
-                             ${pendingUser.address ? `<li><strong>Indirizzo:</strong> ${pendingUser.address}</li>` : ''}
-                             ${pendingUser.phone ? `<li><strong>Telefono:</strong> ${pendingUser.phone}</li>` : ''}
-                           </ul>
-                           <p>Accedi al pannello di amministrazione per approvare o rifiutare questa richiesta.</p>`
-                });
-            }
-        } catch (emailError) {
-            console.error("Errore invio email admin:", emailError);
-            // Non bloccare la risposta
-        }
-
-        return res.status(201).json({ 
+        // ✅ Rispondi SUBITO al client
+        res.status(201).json({ 
             message: "Registrazione completata. Attendi l'approvazione dell'amministratore." 
         });
+
+        // ✅ Invio email in background (non bloccante)
+        if (process.env.ADMIN_EMAIL) {
+            sendMail({
+                to: process.env.ADMIN_EMAIL,
+                subject: "Nuova registrazione in attesa di approvazione - Heya",
+                html: `<p>È stata effettuata una nuova registrazione con i seguenti dettagli:</p>
+                   <ul>
+                     <li><strong>Nome:</strong> ${pendingUser.name} ${pendingUser.surname}</li>
+                     <li><strong>Username:</strong> ${pendingUser.username}</li>
+                     <li><strong>Email:</strong> ${pendingUser.email}</li>
+                     ${pendingUser.address ? `<li><strong>Indirizzo:</strong> ${pendingUser.address}</li>` : ''}
+                     ${pendingUser.phone ? `<li><strong>Telefono:</strong> ${pendingUser.phone}</li>` : ''}
+                   </ul>
+                   <p>Accedi al pannello di amministrazione per approvare o rifiutare questa richiesta.</p>`
+            }).catch(emailError => {
+                console.error("Errore invio email admin:", emailError);
+            });
+        }
+
     } catch (error) {
         console.error("Errore durante la registrazione:", error);
         return res.status(500).json({ 
