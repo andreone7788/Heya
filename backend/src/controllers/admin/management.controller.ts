@@ -52,29 +52,30 @@ export const CreateUserController = async (req: Request, res: Response) => {
         }
         const createdUser = await createUser(newUser);
 
-        // Invio email admin (non bloccante)
-        try {
-            if (process.env.ADMIN_EMAIL) {
-                await sendMail({
-                    to: createdUser.email,
-                    subject: "Nuova registrazione attiva - Heya",
-                    html: `<p>È stata effettuata una nuova registrazione con i seguenti dettagli:</p>
-                           <ul>
-                             <li><strong>Nome:</strong> ${createdUser.name} ${createdUser.surname}</li>
-                             <li><strong>Username:</strong> ${createdUser.username}</li>
-                             <li><strong>Email:</strong> ${createdUser.email}</li>
-                             ${createdUser.address ? `<li><strong>Indirizzo:</strong> ${createdUser.address}</li>` : ''}
-                             ${createdUser.phone ? `<li><strong>Telefono:</strong> ${createdUser.phone}</li>` : ''}
-                             <li><strong>Password Temporanea:</strong> ${createdUser.password}
-                           </ul>
-                           <a href='http://localhost:5173'>Clicca qui per accedere alla pagina di Login</a>`
-                });
-            }
-        } catch (emailError) {
-            console.error("Errore invio email admin:", emailError);
-            // Non bloccare la risposta
+        // ✅ Rispondi SUBITO
+        res.status(201).json({ message: 'User created successfully', user: createdUser });
+
+        // ✅ Email in background
+        if (process.env.ADMIN_EMAIL) {
+            sendMail({
+                to: createdUser.email,
+                subject: "Nuova registrazione attiva - Heya",
+                html: `<p>È stata effettuata una nuova registrazione con i seguenti dettagli:</p>
+                   <ul>
+                     <li><strong>Nome:</strong> ${createdUser.name} ${createdUser.surname}</li>
+                     <li><strong>Username:</strong> ${createdUser.username}</li>
+                     <li><strong>Email:</strong> ${createdUser.email}</li>
+                     ${createdUser.address ? `<li><strong>Indirizzo:</strong> ${createdUser.address}</li>` : ''}
+                     ${createdUser.phone ? `<li><strong>Telefono:</strong> ${createdUser.phone}</li>` : ''}
+                     <li><strong>Password Temporanea:</strong> ${createdUser.password}
+                   </ul>
+                   <a href='https://heya-sigma-nine.vercel.app'>Clicca qui per accedere</a>`
+            }).then(() => {
+                console.log("✅ Email benvenuto inviata a:", createdUser.email);
+            }).catch(emailError => {
+                console.error("❌ Errore invio email benvenuto:", emailError);
+            });
         }
-        return res.status(201).json({ message: 'User created successfully', user: createdUser });
     } catch (error) {
         return res.status(500).json({ message: 'errore nella creazione dell\'utente' });
     }
@@ -88,20 +89,25 @@ export const DeleteUserController = async (req: Request, res: Response) => {
     }
 
     try {
-
         const user = await findUserById(userId);
-         await sendMail({
-            to: user.email,
-            subject: 'Rigetto registrazione - Heya',
-            html: `<h2>La tua registrazione è stata rigettata</h2>
-                   <p>Ciao ${user.username},</p>
-                   <p>Siamo spiacenti di informarti che la tua registrazione su Heya è stata rigettata.</p>
-                   <p>Per ulteriori informazioni, contatta il supporto.</p>`
-        });
         await deleteUser(userId);
-        return res.status(204).end();
+        
+        // ✅ Rispondi SUBITO
+        res.status(204).end();
+        
+        // ✅ Email in background
+        sendMail({
+            to: user.email,
+            subject: 'Account eliminato - Heya',
+            html: `<h2>Il tuo account è stato eliminato</h2>
+                   <p>Ciao ${user.username},</p>
+                   <p>Il tuo account su Heya è stato eliminato.</p>
+                   <p>Per ulteriori informazioni, contatta il supporto.</p>`
+        }).catch(emailError => {
+            console.error("❌ Errore invio email eliminazione:", emailError);
+        });
     } catch (error) {
-        console.error('DeleteUserController error:', error); // <--- AGGIUNGI QUESTO
+        console.error('DeleteUserController error:', error);
         return res.status(500).json({ message: 'errore nell\'eliminazione dell\'utente' });
     }
 }
@@ -117,8 +123,11 @@ export const ApproveUserController = async (req: Request, res: Response) => {
     try {
         const result = await approveRegistrationRequest(requestId);
 
-        // Invia email all'utente con la password temporanea
-        await sendMail({
+        // ✅ Rispondi SUBITO
+        res.status(200).json({ message: "Utente approvato con successo" });
+
+        // ✅ Email in background
+        sendMail({
             to: result.email,
             subject: 'Approvazione registrazione - Heya',
             html: `<h2>La tua registrazione è stata approvata!</h2>
@@ -131,9 +140,12 @@ export const ApproveUserController = async (req: Request, res: Response) => {
                    </ul>
                    <p><strong>Importante:</strong> Ti consigliamo di cambiare la password al primo accesso.</p>
                    <p>Benvenuto a bordo!</p>`
+        }).then(() => {
+            console.log("✅ Email approvazione inviata a:", result.email);
+        }).catch(emailError => {
+            console.error("❌ Errore invio email approvazione:", emailError);
         });
 
-        return res.status(200).json({ message: "Utente approvato e mail inviata con successo" });
     } catch (error) {
         return res.status(400).json({ 
             error: error instanceof Error ? error.message : "Errore nell'approvazione dell'utente" 
@@ -149,20 +161,25 @@ export const DeleteUserPendingController = async (req: Request, res: Response) =
     }
 
     try {
-
         const user = await findUserPendingById(id);
-         await sendMail({
+        await deleteUserPending(id);
+        
+        // ✅ Rispondi SUBITO
+        res.status(204).end();
+        
+        // ✅ Email in background
+        sendMail({
             to: user.email,
             subject: 'Rigetto registrazione - Heya',
             html: `<h2>La tua registrazione è stata rigettata</h2>
                    <p>Ciao ${user.username},</p>
                    <p>Siamo spiacenti di informarti che la tua registrazione su Heya è stata rigettata.</p>
                    <p>Per ulteriori informazioni, contatta il supporto.</p>`
+        }).catch(emailError => {
+            console.error("❌ Errore invio email rigetto:", emailError);
         });
-        await deleteUserPending(id);
-        return res.status(204).end();
     } catch (error) {
-        console.error('DeleteUserController error:', error); // <--- AGGIUNGI QUESTO
+        console.error('DeleteUserPendingController error:', error);
         return res.status(500).json({ message: 'errore nell\'eliminazione dell\'utente' });
     }
 }
