@@ -8,9 +8,12 @@ export default defineConfig({
   envDir: '.',
   server: {
     port: 5173,
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, '../backend/ssl/key.pem')),
-      cert: fs.readFileSync(path.resolve(__dirname, '../backend/ssl/cert.pem'))
-    }
+    // HTTPS solo in development locale, non su Vercel
+    ...(process.env.NODE_ENV !== 'production' && fs.existsSync(path.resolve(__dirname, '../backend/ssl/key.pem')) ? {
+      https: {
+        key: fs.readFileSync(path.resolve(__dirname, '../backend/ssl/key.pem')),
+        cert: fs.readFileSync(path.resolve(__dirname, '../backend/ssl/cert.pem'))
+      }
+    } : {})
   }
 })
