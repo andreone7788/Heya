@@ -23,7 +23,6 @@
     "@types/jasmine": "^5.1.13",
     "@types/multer": "^2.0.0",
     "@types/node": "^24.10.1",
-    "@types/nodemailer": "^7.0.4",
     "dotenv": "^17.2.3",
     "jasmine-core": "^5.13.0",
     "karma": "^6.4.4",
@@ -46,8 +45,8 @@
     "express": "^5.2.1",
     "express-session": "^1.18.2",
     "multer": "^2.0.2",
-    "nodemailer": "^7.0.12",
     "prisma": "^6.19.0",
+    "resend": "^6.12.2",
     "ws": "^8.18.3",
     "zod": "^4.1.12"
   }

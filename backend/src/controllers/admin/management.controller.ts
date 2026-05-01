@@ -7,6 +7,18 @@ import { approveRegistrationRequest } from "../../models/admin.model";
 import { CheckDuplicateEmail } from "../../models/user.model";
 import z from "zod";
 
+/*
+Causa limiti di railway, tutte le email ora vengono inviate 
+all'admin invece che agli utenti interessati. 
+In questo modo possiamo comunque testare la funzionalità email senza superare i limiti
+ di invio di Railway. Quando saremo pronti per la produzione, 
+basterà cambiare il campo "to" nelle chiamate a sendMail da process.env.ADMIN_EMAIL 
+a user.email o result.email come era originariamente previsto.
+In produzione si implementerà un sistema di code per le email (es. RabbitMQ) 
+in modo da gestire grandi volumi di email senza superare i limiti di invio, 
+e si potranno inviare le email direttamente agli utenti interessati.
+*/
+
 // Controller per ottenere la lista di tutti gli utenti (admin)
 export const UserListController = async (req: Request, res: Response) => {
     try {
@@ -58,7 +70,7 @@ export const CreateUserController = async (req: Request, res: Response) => {
         // ✅ Email in background
         if (process.env.ADMIN_EMAIL) {
             sendMail({
-                to: createdUser.email,
+                to: process.env.ADMIN_EMAIL as string,
                 subject: "Nuova registrazione attiva - Heya",
                 html: `<p>È stata effettuata una nuova registrazione con i seguenti dettagli:</p>
                    <ul>
@@ -97,7 +109,7 @@ export const DeleteUserController = async (req: Request, res: Response) => {
         
         // ✅ Email in background
         sendMail({
-            to: user.email,
+            to: process.env.ADMIN_EMAIL as string,
             subject: 'Account eliminato - Heya',
             html: `<h2>Il tuo account è stato eliminato</h2>
                    <p>Ciao ${user.username},</p>
@@ -128,7 +140,7 @@ export const ApproveUserController = async (req: Request, res: Response) => {
 
         // ✅ Email in background
         sendMail({
-            to: result.email,
+            to: process.env.ADMIN_EMAIL as string, 
             subject: 'Approvazione registrazione - Heya',
             html: `<h2>La tua registrazione è stata approvata!</h2>
                    <p>Ciao ${result.username},</p>
@@ -169,7 +181,7 @@ export const DeleteUserPendingController = async (req: Request, res: Response) =
         
         // ✅ Email in background
         sendMail({
-            to: user.email,
+            to: process.env.ADMIN_EMAIL as string,
             subject: 'Rigetto registrazione - Heya',
             html: `<h2>La tua registrazione è stata rigettata</h2>
                    <p>Ciao ${user.username},</p>
