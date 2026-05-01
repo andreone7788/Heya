@@ -69,12 +69,14 @@ app.use(express.json());
 app.use(expressSession({
     secret: process.env.SESSION_SECRET || 'default_secret',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false, // ✅ Cambiato da true a false
     cookie: { 
-        secure: !isDevelopment, // ✅ secure=true solo in production
+        secure: true, // ✅ Sempre true in production (Railway usa HTTPS)
         httpOnly: true,
-        sameSite: isDevelopment ? 'lax' : 'none'
-    }
+        sameSite: 'none', // ✅ Necessario per cross-site
+        maxAge: 24 * 60 * 60 * 1000 // ✅ 24 ore
+    },
+    proxy: true // ✅ IMPORTANTE: Railway è dietro un proxy
 }));
 
 app.use(logSession);
