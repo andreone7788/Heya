@@ -6,7 +6,7 @@ import { logSession } from './middleware/auth';
 import { router } from './routes/index';
 import { Request, Response } from 'express';
 import https from 'https';
-import http from 'http'; // ✅ Aggiungi import
+import http from 'http';
 import fs from 'fs';
 import { initializeWebSocket } from './webSocket/webSocket.handler';
 
@@ -42,7 +42,25 @@ const allowedOrigins = process.env.FRONTEND_URL
     : ['https://localhost:5173'];
 
 app.use(cors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+        // Permetti richieste senza origin (mobile apps, Postman, ecc.)
+        if (!origin) {
+            return callback(null, true);
+        }
+        
+        // Permetti origini nella whitelist
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        
+        // Permetti tutti i domini Vercel del progetto heya
+        if (origin.includes('heya') && origin.endsWith('.vercel.app')) {
+            return callback(null, true);
+        }
+        
+        // Blocca tutto il resto
+        callback(new Error('Not allowed by CORS'));
+    },
     credentials: true
 }));
 
