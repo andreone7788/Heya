@@ -37,14 +37,17 @@ DATABASE_URL=<railway-mysql-url>
 SESSION_SECRET=<genera-random-string>
 ENCRYPTION_KEY=<genera-con-node-crypto>
 NODE_ENV=production
-MAIL_HOST=smtp.gmail.com
-MAIL_PORT=587
-MAIL_SECURE=false
-MAIL_USER=<tua-email@gmail.com>
-MAIL_PASS=<app-password-google>
-MAIL_FROM=Heya <tua-email@gmail.com>
+RESEND_API_KEY=<resend-api-key>
+MAIL_FROM=onboarding@resend.dev
 ADMIN_EMAIL=<tua-email@gmail.com>
 ```
+
+**Note su Email Notifications**:
+- ⚠️ Railway **blocca le porte SMTP** (25, 465, 587) → impossibile usare Nodemailer
+- ✅ Soluzione: **Resend API** (HTTP su porta 443)
+- 📧 In sandbox mode (dominio `onboarding@resend.dev`), le email vanno **solo all'indirizzo registrato su Resend**
+- 🎯 Workaround attuale: tutte le email vengono inviate a `ADMIN_EMAIL` (l'admin inoltra manualmente le credenziali)
+- 🚀 **Per produzione**: verifica un dominio personalizzato su Resend per inviare email agli utenti finali
 
 **Genera chiavi sicure**:
 ```bash
@@ -436,10 +439,12 @@ railway logs
 ### ❌ Email non inviate
 **Problema**: Notifiche email non arrivano  
 **Soluzione**:
-- Usa Google App Password (non password account)
-- Verifica `MAIL_USER` e `MAIL_PASS` in Railway
-- Controlla spam folder
-- Test con: `railway run node -e "require('./dist/services/mail').sendTestEmail()"`
+- ⚠️ Railway **blocca le porte SMTP** → non usare Nodemailer
+- ✅ Usa **Resend API** (HTTP porta 443)
+- Verifica `RESEND_API_KEY` in Railway
+- Controlla che `ADMIN_EMAIL` corrisponda all'email registrata su Resend (modalità sandbox)
+- Test con: `railway logs` → cerca "Email sent successfully"
+- **Produzione**: verifica un dominio personalizzato su [Resend Dashboard](https://resend.com/domains)
 
 ### ❌ Session cookie not working
 **Problema**: Logout automatico o sessione non persiste  

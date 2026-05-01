@@ -54,6 +54,7 @@ Il progetto e' stato sviluppato da **AndreOne & Dami** come parte di un corso di
 - Creazione diretta di nuovi utenti (con password temporanea generata automaticamente)
 - Gestione delle richieste di registrazione in sospeso (approvazione/rifiuto)
 - Notifiche email automatiche per registrazione, approvazione, rifiuto e credenziali
+- ⚠️ **Nota**: In modalità sandbox di Resend, tutte le email vengono inviate all'amministratore (richiede dominio verificato per invio agli utenti finali)
 
 ### Gestione del Profilo Utente
 - Modifica del nome utente, telefono e indirizzo
@@ -84,7 +85,7 @@ Il progetto e' stato sviluppato da **AndreOne & Dami** come parte di un corso di
 | WebSocket (ws) | 8.18 | Messaggistica in tempo reale |
 | Zod | 4.1 | Validazione degli input |
 | bcrypt | 6.0 | Hashing delle password |
-| Nodemailer | 7.0 | Invio email SMTP |
+| Resend | 6.12 | Email notifications (HTTP API) |
 | Multer | 2.0 | Upload di file |
 | Node.js crypto | (built-in) | Crittografia AES-256-GCM |
 
@@ -232,13 +233,12 @@ DATABASE_URL="mysql://utente:password@localhost:3306/heya"
 SESSION_SECRET="la_tua_chiave_segreta_di_sessione"
 ENCRYPTION_KEY="chiave_esadecimale_32_byte"
 
-MAIL_HOST="smtp.esempio.com"
-MAIL_PORT=587
-MAIL_SECURE=false
-MAIL_USER="la_tua_email"
-MAIL_PASS="la_tua_password_email"
-MAIL_ADMIN="email_admin@esempio.com"
+RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxx"
+MAIL_FROM="onboarding@resend.dev"
+ADMIN_EMAIL="tua-email@example.com"
 ```
+
+**Nota**: Per ottenere una `RESEND_API_KEY`, registrati su [resend.com](https://resend.com) (piano gratuito: 100 email/giorno, 3000 email/mese).
 
 Eseguire le migrazioni del database:
 ```bash
@@ -326,6 +326,7 @@ The project was developed by **AndreOne & Dami** as part of a web development co
 - Direct creation of new users (with auto-generated temporary password)
 - Pending registration request management (approve/reject)
 - Automatic email notifications for registration, approval, rejection, and credentials
+- ⚠️ **Note**: In Resend sandbox mode, all emails are sent to the administrator (requires verified domain to send to end users)
 
 ### User Profile Management
 - Edit username, phone number, and address
@@ -356,7 +357,7 @@ The project was developed by **AndreOne & Dami** as part of a web development co
 | WebSocket (ws) | 8.18 | Real-time messaging |
 | Zod | 4.1 | Input validation |
 | bcrypt | 6.0 | Password hashing |
-| Nodemailer | 7.0 | SMTP email sending |
+| Resend | 6.12 | Email notifications (HTTP API) |
 | Multer | 2.0 | File uploads |
 | Node.js crypto | (built-in) | AES-256-GCM encryption |
 
@@ -504,13 +505,12 @@ DATABASE_URL="mysql://user:password@localhost:3306/heya"
 SESSION_SECRET="your_session_secret_key"
 ENCRYPTION_KEY="32_byte_hex_key"
 
-MAIL_HOST="smtp.example.com"
-MAIL_PORT=587
-MAIL_SECURE=false
-MAIL_USER="your_email"
-MAIL_PASS="your_email_password"
-MAIL_ADMIN="admin@example.com"
+RESEND_API_KEY="re_xxxxxxxxxxxxxxxxxx"
+MAIL_FROM="onboarding@resend.dev"
+ADMIN_EMAIL="your-email@example.com"
 ```
+
+**Note**: To get a `RESEND_API_KEY`, sign up at [resend.com](https://resend.com) (free tier: 100 emails/day, 3000 emails/month).
 
 Run database migrations:
 ```bash
