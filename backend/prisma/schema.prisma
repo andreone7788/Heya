@@ -74,8 +74,8 @@ model ConversationParticipant {
   userId         Int
   conversationId Int
   user           User         @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
-
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
   @@unique([userId, conversationId])
   @@index([conversationId])
 }
@@ -90,8 +90,8 @@ model Message {
   tag            Bytes
   keyId          String       @default("k1")
   isRead         Boolean      @default(false)
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   sender         User         @relation("SentMessages", fields: [senderId], references: [userId], onDelete: Cascade)
-
-  @@index([conversationId]) // per paginazione ultimi 50 messaggi
+  
+  @@index([conversationId])
 }
